@@ -9,7 +9,7 @@ import (
 func TestRunningStatistic(t *testing.T) {
 	assert := assert.New(t)
 
-	stats := NewRunningStats()
+	stats := New()
 	stats.Add(1)
 	stats.Add(2)
 	stats.Add(3)
@@ -17,8 +17,6 @@ func TestRunningStatistic(t *testing.T) {
 	assert.Equal(3, stats.Len())
 	assert.Equal(2.0, stats.Mean())
 	assert.Equal(1.0, stats.Stddev())
-	assert.Equal(1.0, stats.Min())
-	assert.Equal(3.0, stats.Max())
 
 	stats.Clear()
 	assert.Equal(0, stats.Len())

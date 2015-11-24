@@ -8,11 +8,10 @@ import "math"
 type RunningStats struct {
 	n              int
 	m1, m2, m3, m4 float64
-	min, max       float64
 }
 
-// NewRunningStats creates a new running stat object
-func NewRunningStats() *RunningStats {
+// New creates a new running stat object
+func New() *RunningStats {
 	return &RunningStats{}
 }
 
@@ -23,8 +22,6 @@ func (r *RunningStats) Clear() {
 	r.m2 = 0.0
 	r.m3 = 0.0
 	r.m4 = 0.0
-	r.min = 0.0
-	r.max = 0.0
 }
 
 // AddAll adds an array of data to the running stats
@@ -36,37 +33,22 @@ func (r *RunningStats) AddAll(data []float64) {
 
 // Add value to RunningStats regression
 func (r *RunningStats) Add(x float64) {
-	if x > r.max {
-		r.max = x
-	} else if x < r.min {
-		r.min = x
-	}
 
 	n1 := float64(r.n)
 	r.n++
 	delta := x - r.m1
-	deltaN := delta / n1
+	deltaN := delta / float64(r.n)
 	deltaN2 := deltaN * deltaN
 	term1 := delta * deltaN * n1
 	r.m1 += deltaN
 	r.m4 += term1*deltaN2*float64(r.n*r.n-3*r.n+3) + 6*deltaN2*r.m2 - 4*deltaN*r.m3
-	r.m3 += term1*deltaN*(n1-2) - 3*deltaN*r.m2
+	r.m3 += term1*deltaN*float64(r.n-2) - 3*deltaN*r.m2
 	r.m2 += term1
 }
 
 // Len returns the number of observations
 func (r *RunningStats) Len() int {
 	return r.n
-}
-
-// Min returns the number of observations
-func (r *RunningStats) Min() float64 {
-	return r.min
-}
-
-// Max returns the number of observations
-func (r *RunningStats) Max() float64 {
-	return r.max
 }
 
 // Mean returns the mean of the observations
