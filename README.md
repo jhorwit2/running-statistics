@@ -9,7 +9,7 @@ Running Statistics implementation in Go which is a direct port of [this implemen
 ## Usage
 
 ```
-r := linear.NewRegression()
+r := runningstats.New()
 r.Add(1)
 r.Add(2)
 r.Add(3)
